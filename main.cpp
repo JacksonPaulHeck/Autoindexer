@@ -14,6 +14,7 @@ void populateJPVectorFromInput(JPVector<JPString*>&, ifstream&);
 int main(int argc, char** argv) {
     if(argc == 1) {
         Catch::Session().run();
+        return 0;
     }
     ifstream inFile(argv[1]);
     ifstream bookIn(argv[2]);
