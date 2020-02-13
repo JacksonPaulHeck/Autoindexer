@@ -12,8 +12,9 @@ void parseThroughTheBook(JPVector<JPString*>&, ifstream&, ofstream&);
 void populateJPVectorFromInput(JPVector<JPString*>&, ifstream&);
 
 int main(int argc, char** argv) {
-    int result = Catch::Session().run();
-
+    if(argc == 1) {
+        Catch::Session().run();
+    }
     ifstream inFile(argv[1]);
     ifstream bookIn(argv[2]);
     ofstream outFile(argv[3]);
