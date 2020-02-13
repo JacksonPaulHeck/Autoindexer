@@ -15,7 +15,7 @@ class JPVector{
         int max_capacity;
     public:
         JPVector();
-        JPVector(int size);
+        explicit JPVector(int size);
         JPVector(const JPVector<T>& vector);
         ~JPVector();
         JPVector<T>& operator=(const JPVector<T>&);
@@ -25,14 +25,14 @@ class JPVector{
         T& operator[](int index);
         int size();
         int max_size();
-
+        T &at(int index);
 };
 
 template<class T>
 JPVector<T>::JPVector() {
-    data = new T[1];
-    capacity = 0;
     max_capacity = 1;
+    capacity = 0;
+    data = new T[max_capacity];
 }
 
 template<class T>
@@ -62,12 +62,16 @@ JPVector<T>::~JPVector(){
 
 template<class T>
 JPVector<T>& JPVector<T>::operator=(const JPVector<T> & jpVector) {
-    capacity = jpVector.capacity;
-    max_capacity = jpVector.max_capacity;
-    int i = 0;
-    for(int i = 0;  i <= capacity; i++){
-
+    if(this != &jpVector){
+        delete[] data;
+        capacity = jpVector.capacity;
+        max_capacity = jpVector.max_capacity;
+        data = new T[max_capacity];
+        for(int i = 0; i < capacity; i++){
+            data[i] = jpVector.data[i];
+        }
     }
+    return *this;
 }
 
 
@@ -83,13 +87,46 @@ void JPVector<T>::resize() {
 }
 
 template<class T>
-void JPVector<T>::push_back(const T &data) {}
+void JPVector<T>::push_back(const T &Data) {
+    T* temp = new T[capacity + 1];
+    for(int i = 0; i < capacity; i++){
+        temp[i] = data[i];
+    }
+    temp[capacity] = Data;
+    delete[] data;
+    data = temp;
+    capacity +=1;
+    if(capacity >= max_capacity){
+        resize();
+    }
+}
 
 template<class T>
-void JPVector<T>::pop_back() {}
+void JPVector<T>::pop_back(){
+    if(capacity > 0) {
+        T *temp = new T[capacity];
+        for (int i = 0; i < capacity - 1; i++) {
+            temp[i] = data[i];
+        }
+        delete[] data;
+        data = temp;
+        capacity -= 1;
+    }
+}
 
 template<class T>
-T &JPVector<T>::operator[](int index) {}
+T &JPVector<T>::operator[](int index) {
+    if(!(index < 0 || index >= capacity)){
+        return data[index];
+    }
+}
+
+template<class T>
+T & JPVector<T>::at(int index){
+    if(!(index < 0 || index >= capacity)){
+        return data[index];
+    }
+}
 
 template<class T>
 int JPVector<T>::size() {
