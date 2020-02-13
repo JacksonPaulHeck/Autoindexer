@@ -18,13 +18,18 @@ JPString::JPString(const char *input) {
         int i = 0;
         while (input[i] != '\0' && input[i] != '\r' && input[i] != '\n') { i++; }
         length = i;
-        data = new char[i];
-        for (int j = 0; j < i; j++) {
-            data[j] = input[j];
+        if(length > 0) {
+            data = new char[i];
+            for (int j = 0; j < i; j++) {
+                data[j] = input[j];
+            }
+        }else {
+            length = 0;
+            data = nullptr;
         }
     } else {
         length = 0;
-        data = new char[0];
+        data = nullptr;
     }
 }
 
@@ -155,4 +160,19 @@ JPString& JPString::lowercase() {
         return *this;
     }
     return *this;
+}
+long JPString :: toPageNumber(){
+    if(length > 2) {
+        char *temp = new char[length - 1];
+        if (data[0] == '<' && data[length-1] == '>') {
+            for (int i = 1; i < length; i++) {
+                temp[i - 1] = data[i];
+            }
+        }
+        length = length - 1;
+        delete[] data;
+        data = temp;
+        return atoi(data);
+    }
+    return -1;
 }

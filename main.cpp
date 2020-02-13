@@ -56,8 +56,8 @@ void populateJPVectorFromInput(JPVector<JPString*>& inputJPVector, ifstream& inF
 
 void parseThroughTheBook(JPVector<JPString*>& inputJPVector, ifstream& bookIn, ofstream& outFile){
     char* line = new char[256];
-    int pageNumber;
-    for(int i = 0; i < 100; i++) {
+    int pageNumber = 0;
+    for(int i = 0; i < 1000; i++) {
         bookIn.getline(line, 256);
 
         int r = 0;
@@ -65,15 +65,21 @@ void parseThroughTheBook(JPVector<JPString*>& inputJPVector, ifstream& bookIn, o
             line[r] = tolower(line[r]);
             r++;
         }
-        //remove all characters that are not letters
         char *token = strtok(line, " \",:;.-?!");
-        //add each word to vector jpStringVec
         while (token != NULL) {
             JPString JPToken(token);
-            outFile << JPToken << " ";
+            if(JPToken.size() > 0) {
+                if (JPToken[0] == '<' && JPToken[JPToken.size() - 1] == '>') {
+                    pageNumber = JPToken.toPageNumber();
+                }
+                for (int i = 0; i < inputJPVector.size(); i++) {
+                    if(JPToken == *inputJPVector.at(i)){
+                        outFile << JPToken << ": " << pageNumber << endl;
+                    }
+                }
+            }
             token = strtok(NULL, " \",:;.-?!");
         }
-        outFile << endl;
         delete [] token;
     }
     delete [] line;

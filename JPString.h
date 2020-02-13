@@ -39,6 +39,8 @@ public:
     friend std::ostream &operator<<(std::ostream &, const JPString &);
 
     friend std::istream &operator>>(std::istream &, JPString &);
+
+    long toPageNumber();
 };
 
 
