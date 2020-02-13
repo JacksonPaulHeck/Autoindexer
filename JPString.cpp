@@ -133,22 +133,6 @@ ostream &operator<<(ostream &outStream, const JPString &jpString) {
     return outStream;
 }
 
-//Greater than Comparator
-bool operator>(const JPString &jpString, const JPString &jpString1) {
-    int cap = (JPString().size() < jpString1.size()) ? jpString.size() : jpString1.size();
-    int n = 0;
-    while ((n < cap) && (jpString[n] == jpString1[n])) n++;
-    if (n == cap) return (jpString.size() > jpString1.size());
-
-    if ((('A' <= jpString[n] && jpString[n] <= 'Z') || ('a' <= jpString[n] && jpString[n] <= 'z')) &&
-        (('A' <= jpString1[n] && jpString1[n] <= 'Z') || ('a' <= jpString1[n] && jpString1[n] <= 'z'))) {
-        char A = (jpString[n] & ~32);
-        char B = (jpString1[n] & ~32);
-        if (A != B) return (A > B);
-    }
-    return jpString[n] > jpString1[n];
-}
-
 //IStream Operator
 istream &operator>>(istream &inStream, JPString &jpString) {
     char *temp = new char[1024];
@@ -158,7 +142,17 @@ istream &operator>>(istream &inStream, JPString &jpString) {
     return inStream;
 }
 
-//Less than Comparator
-bool operator<(const JPString &jpString, const JPString &jpString1) {
-    return !(jpString == jpString1) && !(jpString > jpString1);
+JPString& JPString::lowercase() {
+    if(length > 0){
+        char *temp = new char[length];
+        int i = 0;
+        while(i < length){
+            temp[i] = tolower(data[i]);
+            i++;
+        }
+        delete[] data;
+        data = temp;
+        return *this;
+    }
+    return *this;
 }

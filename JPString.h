@@ -32,9 +32,7 @@ public:
 
     int size() const;
 
-    friend bool operator>(const JPString &, const JPString &);
-
-    friend bool operator<(const JPString &, const JPString &);
+    JPString& lowercase();
 
     friend bool operator==(const JPString &, const JPString &);
 
