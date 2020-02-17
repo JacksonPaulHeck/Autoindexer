@@ -2,6 +2,7 @@
 // Created by jacks on 1/26/2020.
 //
 #include <iostream>
+#include <string.h>
 #include "JPString.h"
 
 using namespace std;
@@ -18,12 +19,12 @@ JPString::JPString(const char *input) {
         int i = 0;
         while (input[i] != '\0' && input[i] != '\r' && input[i] != '\n') { i++; }
         length = i;
-        if(length > 0) {
+        if (length > 0) {
             data = new char[i];
             for (int j = 0; j < i; j++) {
                 data[j] = input[j];
             }
-        }else {
+        } else {
             length = 0;
             data = nullptr;
         }
@@ -72,7 +73,7 @@ JPString &JPString::operator=(const char *Data) {
         return *this;
     }
     int i = 0;
-    while (Data[i] != '\0') {i++;}
+    while (Data[i] != '\0') { i++; }
     length = i;
     delete[] data;
     data = new char[length];
@@ -115,7 +116,47 @@ JPString JPString::operator+=(const JPString &jpString) {
     for (int j = 0; j < jpString.size(); j++) {
         temp[length + j] = jpString[j];
     }
-    delete data;
+    delete[] data;
+    length = lengthCombo;
+    data = temp;
+    return *this;
+}
+
+JPString JPString::operator+=(const char *charArr) {
+    int k = 0;
+    while (charArr[k] != '\0') {
+        k++;
+    }
+    int lengthCombo = length + k;
+    char *temp = new char[lengthCombo];
+    for (int i = 0; i < length; i++) {
+        temp[i] = data[i];
+    }
+    for (int j = 0; j < k; j++) {
+        temp[length + j] = charArr[j];
+    }
+    delete[] data;
+    length = lengthCombo;
+    data = temp;
+    return *this;
+}
+
+JPString JPString::operator+=(int integer) {
+    char charArr[16];
+    sprintf(charArr, "%d", integer);
+    int k = 0;
+    while (charArr[k] != '\0') {
+        k++;
+    }
+    int lengthCombo = length + k;
+    char *temp = new char[lengthCombo];
+    for (int i = 0; i < length; i++) {
+        temp[i] = data[i];
+    }
+    for (int j = 0; j < k; j++) {
+        temp[length + j] = charArr[j];
+    }
+    delete[] data;
     length = lengthCombo;
     data = temp;
     return *this;
@@ -147,11 +188,11 @@ istream &operator>>(istream &inStream, JPString &jpString) {
     return inStream;
 }
 
-JPString& JPString::lowercase() {
-    if(length > 0){
+JPString &JPString::lowercase() {
+    if (length > 0) {
         char *temp = new char[length];
         int i = 0;
-        while(i < length){
+        while (i < length) {
             temp[i] = tolower(data[i]);
             i++;
         }
@@ -161,18 +202,23 @@ JPString& JPString::lowercase() {
     }
     return *this;
 }
-long JPString :: toPageNumber(){
-    if(length > 2) {
-        char *temp = new char[length - 1];
-        if (data[0] == '<' && data[length-1] == '>') {
-            for (int i = 1; i < length; i++) {
-                temp[i - 1] = data[i];
+
+bool JPString::operator!=(const JPString &testingJPString) {
+    if (testingJPString.size() == length) {
+        int i = 0;
+        bool output;
+        while (i < testingJPString.size() && i < length) {
+            output = testingJPString[i] == data[i];
+            if (!output) {
+                return false;
             }
+            i++;
         }
-        length = length - 1;
-        delete[] data;
-        data = temp;
-        return atoi(data);
+        return true;
     }
-    return -1;
+    return false;
+}
+
+int JPString :: operator < (const JPString & compareString){
+    return strcmp(data, compareString.data);
 }

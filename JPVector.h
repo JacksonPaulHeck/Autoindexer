@@ -1,7 +1,6 @@
 //
 // Created by jacks on 2/12/2020.
 //
-
 #ifndef INC_20S_PA02_AUTOINDEXER_JPVECTOR_H
 #define INC_20S_PA02_AUTOINDEXER_JPVECTOR_H
 

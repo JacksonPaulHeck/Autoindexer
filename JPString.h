@@ -26,7 +26,15 @@ public:
 
     bool operator!=(char);
 
+    bool operator!=(const JPString&);
+
     JPString operator+=(const JPString &);
+
+    JPString operator+=(const char*);
+
+    JPString operator+=(int);
+
+    int operator < (const JPString &);
 
     char &operator[](int) const;
 
@@ -39,8 +47,6 @@ public:
     friend std::ostream &operator<<(std::ostream &, const JPString &);
 
     friend std::istream &operator>>(std::istream &, JPString &);
-
-    long toPageNumber();
 };
 
 
