@@ -168,6 +168,7 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn, ofstrea
             line[r] = tolower(line[r]);
             r++;
         }
+        line[r] = '\0';
         char *token = strtok(line, " \",:;.-?!\r");
         while (token != NULL) {
             JPString JPToken(token);
@@ -229,17 +230,44 @@ bool isPhrase(JPString &jpString) {
 
 bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
     sort(inputVector);
+    JPVector<char> letterVector;
+    JPString tempJPString;
+    letterVector.push_back(' ');
+    for (int j = 0; j < inputVector.size(); j++) {
+        tempJPString = *inputVector[j];
+        bool isContained = false;
+        for (int k = 0; k < letterVector.size(); k++) {
+            if (tempJPString[0] == letterVector[k]) {
+                isContained = true;
+                continue;
+            }
+        }
+        if (!isContained) {
+            letterVector.push_back(tempJPString[0]);
+        }
+    }
+
     for (int i = 0; i < inputVector.size(); i++) {
+        tempJPString = *inputVector[i];
+        for (int j = 0; j < letterVector.size(); j++) {
+            if (tempJPString[0] == letterVector[j]) {
+                outFile << "[";
+                outFile << letterVector[j];
+                outFile << "]" << endl;
+                letterVector[j] = '\0';
+            }
+        }
         outFile << *inputVector[i] << endl;
     }
 }
-void sort(JPVector<JPString *> &inputVector){
+
+void sort(JPVector<JPString *> &inputVector) {
     int i, j, min_idx;
 
-    for(i = 0; i < inputVector.size() - 1; i++){
+    for (i = 0; i < inputVector.size() - 1; i++) {
         min_idx = i;
-        for(j = i+1; j < inputVector.size(); j++){
-            if((*inputVector[j] < *inputVector[min_idx]) < 0){
+        for (j = i + 1; j < inputVector.size(); j++) {
+            if ((*inputVector[j] < *inputVector[min_idx]) < 0) {
                 min_idx = j;
             }
         }
@@ -247,8 +275,8 @@ void sort(JPVector<JPString *> &inputVector){
     }
 }
 
-void swap(JPVector<JPString *> &inputVector, int min_idx, int i){
-    JPString* temp = inputVector[min_idx];
+void swap(JPVector<JPString *> &inputVector, int min_idx, int i) {
+    JPString *temp = inputVector[min_idx];
     inputVector[min_idx] = inputVector[i];
     inputVector[i] = temp;
 }

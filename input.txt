@@ -1,6 +1,5 @@
 want
 2-3 tree
-is
 youwersdfa
 b+ tree
 they

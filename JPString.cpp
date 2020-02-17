@@ -72,13 +72,25 @@ JPString &JPString::operator=(const char *Data) {
     if (this->data == Data) {
         return *this;
     }
-    int i = 0;
-    while (Data[i] != '\0') { i++; }
-    length = i;
-    delete[] data;
-    data = new char[length];
-    for (int j = 0; j < length; j++) {
-        data[j] = Data[j];
+    if (Data) {
+        int i = 0;
+        while (Data[i] != '\0' && Data[i] != '\r' && Data[i] != '\n') { i++; }
+        length = i;
+        delete[] data;
+        if (length > 0) {
+            data = new char[length];
+            for (int j = 0; j < i; j++) {
+                data[j] = Data[j];
+            }
+        } else {
+            delete [] data;
+            length = 0;
+            data = nullptr;
+        }
+    } else {
+        delete [] data;
+        length = 0;
+        data = nullptr;
     }
     return *this;
 }
@@ -163,7 +175,7 @@ JPString JPString::operator+=(int integer) {
 }
 
 //Indexing Operator
-char &JPString::operator[](int i) const {
+char & JPString::operator[](int i) const {
     return data[i];
 }
 
