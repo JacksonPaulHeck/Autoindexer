@@ -12,13 +12,13 @@ class JPVector{
         T* data;
         int capacity;
         int max_capacity;
+        void resize();
     public:
         JPVector();
         explicit JPVector(int size);
         JPVector(const JPVector<T>& vector);
         ~JPVector();
         JPVector<T>& operator=(const JPVector<T>&);
-        void resize();
         void push_back(const T& data);
         void pop_back();
         T& operator[](int index);

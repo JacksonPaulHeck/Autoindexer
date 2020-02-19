@@ -74,7 +74,7 @@ JPString &JPString::operator=(const char *Data) {
     }
     if (Data) {
         int i = 0;
-        while (Data[i] != '\0' && Data[i] != '\r' && Data[i] != '\n') { i++; }
+        while (Data[i] != '\0' && Data[i] != '\n') { i++; }
         length = i;
         delete[] data;
         if (length > 0) {

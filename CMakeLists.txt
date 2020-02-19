@@ -12,7 +12,7 @@ set (EXE_NAME AutoIndexer)
 # etc....
 # if you need more, add them here and in the foreach stmt below.
 set (input01 "input.txt")
-set (input02 "WarAndPeaceBook1.txt")
+set (input02 "book.txt")
 set (input03 "")
 
 #
@@ -24,4 +24,4 @@ foreach(file IN LISTS input01 input02 input03)
 endforeach()
 
 set(CMAKE_CXX_STANDARD 17)
-add_executable(${EXE_NAME} main.cpp JPString.cpp catch.hpp VectorTests.cpp)
+add_executable(${EXE_NAME} main.cpp JPString.cpp catch.hpp test.cpp)
