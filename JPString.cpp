@@ -10,19 +10,23 @@ using namespace std;
 //Empty Constructor
 JPString::JPString() {
     length = 0;
-    data = new char[0];
+    data = nullptr;
 }
 
 //Constructor with char* as param
 JPString::JPString(const char *input) {
     if (input) {
         int i = 0;
-        while (input[i] != '\0' && input[i] != '\r' && input[i] != '\n') { i++; }
+        while (input[i] != '\0' && input[i] != '\r' && input[i] != '\n') {
+            i++;
+        }
         length = i;
+        data = new char[length+1];
         if (length > 0) {
-            data = new char[i];
-            for (int j = 0; j < i; j++) {
+            int j = 0;
+            while (input[j] != '\0' && input[j] != '\r' && input[j] != '\n') {
                 data[j] = input[j];
+                j++;
             }
         } else {
             length = 0;
@@ -69,10 +73,10 @@ JPString &JPString::operator=(const JPString &jpString) {
 
 //Assignment Operator
 JPString &JPString::operator=(const char *Data) {
-    if (this->data == Data) {
+    if (data == Data) {
         return *this;
     }
-    if (Data) {
+    else if (Data) {
         int i = 0;
         while (Data[i] != '\0' && Data[i] != '\n') { i++; }
         length = i;
@@ -83,12 +87,12 @@ JPString &JPString::operator=(const char *Data) {
                 data[j] = Data[j];
             }
         } else {
-            delete [] data;
+            delete[] data;
             length = 0;
             data = nullptr;
         }
     } else {
-        delete [] data;
+        delete[] data;
         length = 0;
         data = nullptr;
     }
@@ -175,7 +179,7 @@ JPString JPString::operator+=(int integer) {
 }
 
 //Indexing Operator
-char & JPString::operator[](int i) const {
+char &JPString::operator[](int i) const {
     return data[i];
 }
 
@@ -231,6 +235,6 @@ bool JPString::operator!=(const JPString &testingJPString) {
     return false;
 }
 
-int JPString :: operator < (const JPString & compareString){
+int JPString::operator<(const JPString &compareString) {
     return strcmp(data, compareString.data);
 }

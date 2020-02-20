@@ -10,7 +10,7 @@ using namespace std;
 
 void parseThroughTheBookWithWord(JPString &, ifstream &, ofstream &);
 
-void parseThroughTheBookWithPhrase(JPString &, ifstream &, ofstream &);
+void parseThroughTheBookWithPhrase(JPString &, ifstream &);
 
 void populateJPVectorFromInput(JPVector<JPString *> &, ifstream &);
 
@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
         if (!isPhrase(*inputJPVector.at(i))) {
             parseThroughTheBookWithWord(*inputJPVector.at(i), bookIn, outFile);
         } else {
-            parseThroughTheBookWithPhrase(*inputJPVector.at(i), bookIn, outFile);
+            parseThroughTheBookWithPhrase(*inputJPVector.at(i), bookIn);
         }
     }
     printToFile(inputJPVector, outFile);
@@ -53,6 +53,8 @@ int main(int argc, char **argv) {
         delete inputJPVector.at(i);
     }
     inFile.close();
+    bookIn.close();
+    outFile.close();
     return 0;
 }
 
@@ -136,36 +138,38 @@ long toPageNumber(JPString &jpString) {
     return -1;
 }
 
-void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn, ofstream &outFile) {
+void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
     JPVector<JPString *> tempVector;
-    char *temp = new char[20];
-    JPString *tempJPString;
+    char *temp = new char[80];
     int e = 0;
-    for (int l = 0; l < jpString.size(); l++) {
-        temp[e] = jpString[l];
-        if (temp[e] == ' ' || temp[e] == '\0' || temp[e] == '-' || temp[e] == '.') {
-            temp[e] = '\0';
-            tempJPString = new JPString(temp);
-            tempVector.push_back(tempJPString);
-            e = 0;
-            continue;
-        }
-        e++;
+    for (e = 0; e < jpString.size(); e++) {
+        temp[e] = jpString[e];
     }
     temp[e] = '\0';
-    tempJPString = new JPString(temp);
-    tempVector.push_back(tempJPString);
+    char *JPtoken = strtok(temp, " \",:;.-?!");
+    while (JPtoken != nullptr) {
+        JPString *tempJPString = new JPString(JPtoken);
+        tempVector.push_back(tempJPString);
+        JPtoken = strtok(nullptr, " \",:;.-?!");
+    }
+    delete[] JPtoken;
     delete[] temp;
-    char *line = new char[256];
+
+
+
     long pageNumber = 0;
     bookIn.clear();                 // clear fail and eof bits
     bookIn.seekg(0, ios::beg);
     JPVector<int> indexOfJPString;
-    JPString word2;
     JPString word1;
     int i = 0;
+    char *line = new char[512];
+    char *line2 = new char[512];
+    bookIn.getline(line, 256);
+    bookIn.getline(line2, 256);
     while (!bookIn.eof()) {
-        bookIn.getline(line, 256);
+        strcat(line, " ");
+        strcat(line, line2);
         int r = 0;
         while (line[r] != '\0') {
             line[r] = tolower(line[r]);
@@ -206,7 +210,12 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn, ofstrea
         }
         delete[] token;
         i++;
+        strcpy(line, line2);
+        bookIn.getline(line2, 256);
     }
+    delete [] line;
+    delete [] line2;
+
     jpString += ": ";
     for (int p = 0; p < indexOfJPString.size() - 1; p++) {
         jpString += indexOfJPString.at(p);
@@ -217,20 +226,20 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn, ofstrea
     } else {
         jpString += "-1";
     }
-    delete[] line;
-    for (int i = 0; i < tempVector.size(); i++) {
-        delete tempVector.at(i);
+    for (int p = 0; p < tempVector.size(); p++) {
+        delete tempVector.at(p);
     }
+
 }
 
 bool isPhrase(JPString &jpString) {
-    bool isPhrase = false;
     for (int i = 0; i < jpString.size(); i++) {
-        if ((jpString[i] == ' ' || jpString[i] == '-' || jpString[i] == '.') && (jpString[jpString.size() - 1] != ' ')) {
-            isPhrase = true;
+        if ((jpString[i] == ' ' || jpString[i] == '-' || jpString[i] == '.') &&
+            (jpString[jpString.size() - 1] != ' ')) {
+            return true;
         }
     }
-    return isPhrase;
+    return false;
 }
 
 bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
