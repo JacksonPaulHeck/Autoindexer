@@ -2,13 +2,12 @@
 
 #include "catch.hpp"
 #include <iostream>
-#include <fstream>
 #include "JPString.h"
 #include "JPVector.h"
 
 using namespace std;
 
-void parseThroughTheBookWithWord(JPString &, ifstream &, ofstream &);
+void parseThroughTheBookWithWord(JPString &, ifstream &);
 
 void parseThroughTheBookWithPhrase(JPString &, ifstream &);
 
@@ -25,36 +24,51 @@ void sort(JPVector<JPString *> &inputVector);
 void swap(JPVector<JPString *> &, int, int);
 
 int main(int argc, char **argv) {
+    //if no arguments, run the catch tests
     if (argc == 1) {
         Catch::Session().run();
         return 0;
     }
-    ifstream inFile(argv[1]);
-    ifstream bookIn(argv[2]);
-    ofstream outFile(argv[3]);
+
+    ifstream inFile(argv[1]);  //the input file
+    ifstream bookIn(argv[2]);  //the book file
+    ofstream outFile(argv[3]); //the output file
+
+    //check if all three files are open
     if (inFile.is_open() && bookIn.is_open() && outFile.is_open()) {
         cout << "Its Open" << endl;
     }
 
-
+    //create the input vector
     JPVector<JPString *> inputJPVector;
 
+    //populate the input vector from the input file
     populateJPVectorFromInput(inputJPVector, inFile);
 
+    //parse through each of the inputs from the input file and pass to the phrase determining program
     for (int i = 0; i < inputJPVector.size(); i++) {
         if (!isPhrase(*inputJPVector.at(i))) {
-            parseThroughTheBookWithWord(*inputJPVector.at(i), bookIn, outFile);
+            //if the input is a single word, run the word function
+            parseThroughTheBookWithWord(*inputJPVector.at(i), bookIn);
         } else {
+            //if the input is a phrase, run the phrase function
             parseThroughTheBookWithPhrase(*inputJPVector.at(i), bookIn);
         }
     }
+
+    //print the nexly changed input vector elements to the output file
     printToFile(inputJPVector, outFile);
+
+    //delete each of the elements in the input vector
     for (int i = 0; i < inputJPVector.size(); i++) {
         delete inputJPVector.at(i);
     }
+
+    //close each of the files
     inFile.close();
     bookIn.close();
     outFile.close();
+
     return 0;
 }
 
@@ -65,16 +79,14 @@ void populateJPVectorFromInput(JPVector<JPString *> &inputJPVector, ifstream &in
     while (!inFile.eof()) {
         inFile.getline(line, 80);
         jpStringRaw = new JPString(line);
-
         jpString = new JPString(jpStringRaw->lowercase());
-
         inputJPVector.push_back(jpString);
         delete jpStringRaw;
     }
     delete[] line;
 }
 
-void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn, ofstream &outFile) {
+void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
     char *line = new char[256];
     int pageNumber = 0;
     bookIn.clear();                 // clear fail and eof bits
@@ -88,7 +100,7 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn, ofstream 
             r++;
         }
         char *token = strtok(line, " \",:;.-?!");
-        while (token != NULL) {
+        while (token != nullptr) {
             JPString JPToken(token);
             if (JPToken.size() > 0) {
                 if (JPToken[0] == '<' && JPToken[JPToken.size() - 1] == '>') {
@@ -146,17 +158,14 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
         temp[e] = jpString[e];
     }
     temp[e] = '\0';
-    char *JPtoken = strtok(temp, " \",:;.-?!");
-    while (JPtoken != nullptr) {
-        JPString *tempJPString = new JPString(JPtoken);
+    char *JPToken = strtok(temp, " \",:;.-?!");
+    while (JPToken != nullptr) {
+        auto *tempJPString = new JPString(JPToken);
         tempVector.push_back(tempJPString);
-        JPtoken = strtok(nullptr, " \",:;.-?!");
+        JPToken = strtok(nullptr, " \",:;.-?!");
     }
-    delete[] JPtoken;
+    delete[] JPToken;
     delete[] temp;
-
-
-
     long pageNumber = 0;
     bookIn.clear();                 // clear fail and eof bits
     bookIn.seekg(0, ios::beg);
@@ -213,8 +222,8 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
         strcpy(line, line2);
         bookIn.getline(line2, 256);
     }
-    delete [] line;
-    delete [] line2;
+    delete[] line;
+    delete[] line2;
 
     jpString += ": ";
     for (int p = 0; p < indexOfJPString.size() - 1; p++) {
@@ -260,7 +269,6 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
             letterVector.push_back(tempJPString[0]);
         }
     }
-
     for (int i = 0; i < inputVector.size(); i++) {
         tempJPString = *inputVector[i];
         for (int j = 0; j < letterVector.size(); j++) {
