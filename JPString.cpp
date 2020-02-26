@@ -2,7 +2,7 @@
 // Created by jacks on 1/26/2020.
 //
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include "JPString.h"
 
 using namespace std;
@@ -180,7 +180,11 @@ JPString JPString::operator+=(int integer) {
 
 //Indexing Operator
 char &JPString::operator[](int i) const {
-    return data[i];
+    if(i < length){
+        return data[i];
+    }else{
+        throw out_of_range("Index is out of range");
+    }
 }
 
 //Ostream Operator
@@ -235,6 +239,12 @@ bool JPString::operator!=(const JPString &testingJPString) {
     return false;
 }
 
-int JPString::operator<(const JPString &compareString) {
-    return strcmp(data, compareString.data);
+bool operator<(const JPString &compareString, const JPString &comparedString) {
+    int result = strcmp(compareString.data, comparedString.data);
+    return result < 0;
+}
+
+bool operator>(const JPString &jpString, const JPString &jpString1) {
+    int result = strcmp(jpString.data, jpString1.data);
+    return result > 0;
 }

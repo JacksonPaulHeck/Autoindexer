@@ -26,28 +26,31 @@ public:
 
     bool operator!=(char);
 
-    bool operator!=(const JPString&);
+    bool operator!=(const JPString &);
 
     JPString operator+=(const JPString &);
 
-    JPString operator+=(const char*);
+    JPString operator+=(const char *);
 
     JPString operator+=(int);
 
-    int operator < (const JPString &);
+    friend bool operator<(const JPString &, const JPString &);
 
     char &operator[](int) const;
 
     int size() const;
 
-    JPString& lowercase();
-
     friend bool operator==(const JPString &, const JPString &);
+
+    friend bool operator==(const JPString &, const char *);
 
     friend std::ostream &operator<<(std::ostream &, const JPString &);
 
     friend std::istream &operator>>(std::istream &, JPString &);
+
+    friend bool operator>(const JPString &, const JPString &);
+
+    JPString & lowercase();
+
 };
-
-
 #endif //INC_20S_PA02_AUTOINDEXER_JHECKSMU_JPSTRING_H

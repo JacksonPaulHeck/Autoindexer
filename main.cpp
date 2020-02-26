@@ -99,11 +99,18 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
             line[r] = tolower(line[r]);
             r++;
         }
-        char *token = strtok(line, " \",:;.-?!");
+        char *token = strtok(line, " \",:;.`?!");
+        bool boolPageNumber = false;
         while (token != nullptr) {
             JPString JPToken(token);
             if (JPToken.size() > 0) {
-                if (JPToken[0] == '<' && JPToken[JPToken.size() - 1] == '>') {
+                try {
+                    boolPageNumber = JPToken[0] == '<' && JPToken[JPToken.size() - 1] == '>';
+                } catch (exception& e) {
+                    boolPageNumber = false;
+                    cout << e.what() << endl;
+                }
+                if (boolPageNumber) {
                     pageNumber = toPageNumber(JPToken);
                 } else if (JPToken == jpString) {
                     bool containsPageNumber = false;
@@ -118,7 +125,7 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
                     }
                 }
             }
-            token = strtok(NULL, " \",:;.-?!");
+            token = strtok(NULL, " \",:;.`?!");
         }
         delete[] token;
     }
@@ -138,9 +145,20 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
 long toPageNumber(JPString &jpString) {
     if (jpString.size() > 2) {
         char *temp = new char[jpString.size() - 1];
-        if (jpString[0] == '<' && jpString[jpString.size() - 1] == '>') {
+        bool boolPageNumber = false;
+        try {
+            boolPageNumber = jpString[0] == '<' && jpString[jpString.size() - 1] == '>';
+        } catch (exception &e) {
+            boolPageNumber = false;
+            cout << e.what() << endl;
+        }
+        if (boolPageNumber) {
             for (int i = 1; i < jpString.size(); i++) {
-                temp[i - 1] = jpString[i];
+                try {
+                    temp[i - 1] = jpString[i];
+                } catch (exception &e) {
+                    cout << e.what() << endl;
+                }
             }
         }
         int i = atoi(temp);
@@ -155,14 +173,18 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
     char *temp = new char[80];
     int e = 0;
     for (e = 0; e < jpString.size(); e++) {
-        temp[e] = jpString[e];
+        try {
+            temp[e] = jpString[e];
+        } catch (exception &e) {
+            cout << e.what() << endl;
+        }
     }
     temp[e] = '\0';
-    char *JPToken = strtok(temp, " \",:;.-?!");
+    char *JPToken = strtok(temp, " \",:;.`?!");
     while (JPToken != nullptr) {
         auto *tempJPString = new JPString(JPToken);
         tempVector.push_back(tempJPString);
-        JPToken = strtok(nullptr, " \",:;.-?!");
+        JPToken = strtok(nullptr, " \",:;.`?!");
     }
     delete[] JPToken;
     delete[] temp;
@@ -185,19 +207,28 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
             r++;
         }
         line[r] = '\0';
-        char *token = strtok(line, " \",:;.-?!\r");
+        char *token = strtok(line, " \",:;.`?!\r");
+        bool boolPageNumber = false;
         word1 = token;
         while (token != nullptr) {
             if (word1.size() > 0) {
-                if (word1[0] == '<' && word1[word1.size() - 1] == '>') {
+                try {
+                    boolPageNumber = word1[0] == '<' && word1[word1.size() - 1] == '>';
+                } catch (exception& e) {
+                    boolPageNumber = false;
+                    cout << e.what() << endl;
+                }
+                if (boolPageNumber) {
                     pageNumber = toPageNumber(word1);
                 } else if (word1 == *tempVector.at(0)) {
                     bool containsPageNumber = false;
                     bool isEqual = true;
+                    bool isEqualToWord;
                     for (int w = 0; w < tempVector.size(); w++) {
                         word1 = token;
-                        if (word1 == *tempVector.at(w)) {
-                            token = strtok(nullptr, " \",:;.-?!\r");
+                        isEqualToWord = (word1 == *tempVector.at(w));
+                        if (isEqualToWord) {
+                            token = strtok(nullptr, " \",:;.`?!\r");
                         } else {
                             isEqual = false;
                             break;
@@ -214,7 +245,7 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
                     }
                 }
             }
-            token = strtok(nullptr, " \",:;.-?!");
+            token = strtok(nullptr, " \",:;.`?!");
             word1 = token;
         }
         delete[] token;
@@ -243,8 +274,14 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
 
 bool isPhrase(JPString &jpString) {
     for (int i = 0; i < jpString.size(); i++) {
-        if ((jpString[i] == ' ' || jpString[i] == '-' || jpString[i] == '.') &&
-            (jpString[jpString.size() - 1] != ' ')) {
+        bool Bool = false;
+        try{
+            Bool = (jpString[i] == ' ' || jpString[i] == '.') && (jpString[jpString.size() - 1] != ' ');
+        }catch(exception& e){
+            cout << e.what() << endl;
+            Bool = false;
+        }
+        if (Bool) {
             return true;
         }
     }
@@ -257,22 +294,48 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
     JPString tempJPString;
     letterVector.push_back(' ');
     for (int j = 0; j < inputVector.size(); j++) {
-        tempJPString = *inputVector[j];
+        try {
+            tempJPString = *inputVector[j];
+        }catch(exception& e){
+            cout << e.what() << endl;
+        }
         bool isContained = false;
         for (int k = 0; k < letterVector.size(); k++) {
-            if (tempJPString[0] == letterVector[k]) {
+            bool Bool = false;
+            try{
+                Bool = tempJPString[0] == letterVector[k];
+            }catch(exception& e){
+                cout << e.what() << endl;
+                Bool = false;
+            }
+            if (Bool) {
                 isContained = true;
                 continue;
             }
         }
         if (!isContained) {
-            letterVector.push_back(tempJPString[0]);
+            try{
+                letterVector.push_back(tempJPString[0]);
+            }catch(exception& e){
+                cout << e.what() << endl;
+            }
         }
     }
     for (int i = 0; i < inputVector.size(); i++) {
-        tempJPString = *inputVector[i];
+        try {
+            tempJPString = *inputVector[i];
+        }catch(exception& e){
+            cout << e.what() << endl;
+        }
         for (int j = 0; j < letterVector.size(); j++) {
-            if (tempJPString[0] == letterVector[j]) {
+            bool Bool = false;
+            try{
+                Bool = tempJPString[0] == letterVector[j];
+            }catch(exception& e){
+                cout << e.what() << endl;
+                Bool = false;
+            }
+            if (Bool) {
                 outFile << "[";
                 outFile << letterVector[j];
                 outFile << "]" << endl;

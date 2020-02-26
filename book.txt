@@ -57,7 +57,7 @@ lot of strangely dressed people about. People in cloaks. Mr. Dursley couldn't
 bear people who dressed in funny clothes -- the getups you saw on young people!
 He supposed this was some stupid new fashion. He drummed his fingers on the
 steering wheel and his eyes fell on a huddle of these weirdos standing quite
-close by. They were whispering excitedly together. Mr. Dursley was enraged to
+close by. They-were whispering excitedly together. Mr. Dursley was enraged to
 see that a couple of them weren't young at all; why, that man had to be older
 than he was, and wearing an emerald-green cloak! The nerve of him! But then it
 struck Mr. Dursley that this was probably some silly stunt -- these people were
@@ -147,4 +147,5 @@ birds flying in every direction since sunrise. Experts are unable to explain why
 the owls have suddenly changed their sleeping pattern. " The newscaster allowed
 himself a grin. "Most mysterious. And now, over to Jim McGuffin with the
 weather. Going to be any more showers of owls tonight, Jim?"
+good for nothing
 <-1>
