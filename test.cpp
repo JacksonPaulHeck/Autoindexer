@@ -16,13 +16,6 @@ TEST_CASE("JPString can be assigned based off of char* and JPString"){
     REQUIRE(*jpString2 == *jpString);
     REQUIRE(*jpString1 == *jpString2);
 
-    try {
-        JPString tempChar = jpString1[100];
-        cout << tempChar << endl;
-    } catch (exception &e) {
-        cout << e.what() << endl;
-        cout << "Catch" << endl;
-    }
 
     delete jpString;
     delete jpString1;
@@ -32,7 +25,9 @@ TEST_CASE("JPString can be assigned based off of char* and JPString"){
 TEST_CASE("JPString can throw exception for out of bounds") {
     auto *jpString3 = new JPString("JPString");
     try {
-        JPString tempChar = jpString3[100];
+        JPString tempJPString(*jpString3);
+        char tempChar = tempJPString[100];
+        cout << tempChar << endl;
         cout << "Try" << endl;
     } catch (exception &e) {
         cout << e.what() << endl;
