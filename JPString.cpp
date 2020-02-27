@@ -6,9 +6,10 @@
 
 using namespace std;
 
-struct outOfRange : exception {
-    const char *what() const noexcept override { return "Index is out of range for JPString!\n"; }
+struct outOfRangeString : exception {
+    const char *what() const noexcept override { return "Index is out of range for JPString!"; }
 };
+
 //Empty Constructor
 JPString::JPString() {
     length = 0;
@@ -23,7 +24,7 @@ JPString::JPString(const char *input) {
             i++;
         }
         length = i;
-        data = new char[length+1];
+        data = new char[length + 1];
         if (length > 0) {
             int j = 0;
             while (input[j] != '\0' && input[j] != '\r' && input[j] != '\n') {
@@ -64,7 +65,7 @@ JPString &JPString::operator=(const JPString &jpString) {
     if (this == &jpString) {
         return *this;
     }
-    delete[] data;
+    if (data != nullptr) { delete[] data; }
     length = jpString.size();
     data = new char[length];
     for (int i = 0; i < length; i++) {
@@ -77,8 +78,7 @@ JPString &JPString::operator=(const JPString &jpString) {
 JPString &JPString::operator=(const char *Data) {
     if (data == Data) {
         return *this;
-    }
-    else if (Data) {
+    } else if (Data) {
         int i = 0;
         while (Data[i] != '\0' && Data[i] != '\n') { i++; }
         length = i;
@@ -182,10 +182,10 @@ JPString JPString::operator+=(int integer) {
 
 //Indexing Operator
 char &JPString::operator[](int i) const {
-    if(i < length){
+    if (i < length) {
         return data[i];
-    }else{
-        throw outOfRange();
+    } else {
+        throw outOfRangeString();
     }
 }
 
@@ -252,17 +252,17 @@ bool operator>(const JPString &jpString, const JPString &jpString1) {
 }
 
 JPString JPString::substring(int position, int len) {
-    if(length > (position + len)){
-        char* tempString = new char[length];
+    if (length > (position + len)) {
+        char *tempString = new char[length];
         int i = 0;
-        for(i = 0; i < len; i++) {
-            tempString[i] = data[position+i];
+        for (i = 0; i < len; i++) {
+            tempString[i] = data[position + i];
         }
         tempString[i] = '\0';
         JPString tempJPString(tempString);
-        delete [] tempString;
+        delete[] tempString;
         return tempJPString;
-    }else{
-        throw outOfRange();
+    } else {
+        throw outOfRangeString();
     }
 }

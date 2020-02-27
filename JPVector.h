@@ -6,29 +6,41 @@
 
 using namespace std;
 
-struct outOfRange : exception {
-    const char *what() const noexcept override { return "Index is out of range for JPVector!\n"; }
+struct outOfRangeVector : exception {
+    const char *what() const noexcept override { return "Index is out of range for JPVector!"; }
 };
 
-template <class T>
-class JPVector{
-    private:
-        T* data;
-        int capacity;
-        int max_capacity;
-        void resize();
-    public:
-        JPVector();
-        explicit JPVector(int size);
-        JPVector(const JPVector<T>& vector);
-        ~JPVector();
-        JPVector<T>& operator=(const JPVector<T>&);
-        void push_back(const T& data);
-        void pop_back();
-        T& operator[](int index);
-        int size();
-        int max_size();
-        T &at(int index);
+template<class T>
+class JPVector {
+private:
+    T *data;
+    int capacity;
+    int max_capacity;
+
+    void resize();
+
+public:
+    JPVector();
+
+    explicit JPVector(int size);
+
+    JPVector(JPVector<T> &vector);
+
+    ~JPVector();
+
+    JPVector<T> &operator=(const JPVector<T> &);
+
+    void push_back(const T &data);
+
+    void pop_back();
+
+    T &operator[](int index) const;
+
+    int size();
+
+    int max_size();
+
+    T &at(int index) const;
 };
 
 template<class T>
@@ -46,42 +58,40 @@ JPVector<T>::JPVector(int Size) {
 }
 
 template<class T>
-JPVector<T>::JPVector(const JPVector<T> &vector) {
+JPVector<T>::JPVector(JPVector<T> &vector) {
     capacity = vector.capacity;
     max_capacity = vector.max_capacity;
-    delete[] data;
     data = new T[max_capacity];
-    for(int i = 0; i <= capacity; i++){
+    for (int i = 0; i < capacity; i++) {
         data[i] = vector[i];
     }
 }
 
 template<class T>
-JPVector<T>::~JPVector(){
-    if(data != NULL){
+JPVector<T>::~JPVector() {
+    if (data != NULL) {
         delete[] data;
     }
 }
 
 template<class T>
-JPVector<T>& JPVector<T>::operator=(const JPVector<T> & jpVector) {
-    if(this != &jpVector){
+JPVector<T> &JPVector<T>::operator=(const JPVector<T> &jpVector) {
+    if (this != &jpVector) {
         delete[] data;
         capacity = jpVector.capacity;
         max_capacity = jpVector.max_capacity;
         data = new T[max_capacity];
-        for(int i = 0; i < capacity; i++){
+        for (int i = 0; i < capacity; i++) {
             data[i] = jpVector.data[i];
         }
     }
     return *this;
 }
 
-
 template<class T>
 void JPVector<T>::resize() {
-    T* temp = new T[max_capacity*2];
-    for(int i = 0; i < max_capacity; i++){
+    T *temp = new T[max_capacity * 2];
+    for (int i = 0; i < max_capacity; i++) {
         temp[i] = data[i];
     }
     max_capacity *= 2;
@@ -91,22 +101,22 @@ void JPVector<T>::resize() {
 
 template<class T>
 void JPVector<T>::push_back(const T &Data) {
-    T* temp = new T[capacity + 1];
-    for(int i = 0; i < capacity; i++){
+    T *temp = new T[capacity + 1];
+    for (int i = 0; i < capacity; i++) {
         temp[i] = data[i];
     }
     temp[capacity] = Data;
     delete[] data;
     data = temp;
-    capacity +=1;
-    if(capacity >= max_capacity){
+    capacity += 1;
+    if (capacity >= max_capacity) {
         resize();
     }
 }
 
 template<class T>
-void JPVector<T>::pop_back(){
-    if(capacity > 0) {
+void JPVector<T>::pop_back() {
+    if (capacity > 0) {
         T *temp = new T[capacity];
         for (int i = 0; i < capacity - 1; i++) {
             temp[i] = data[i];
@@ -118,18 +128,20 @@ void JPVector<T>::pop_back(){
 }
 
 template<class T>
-T &JPVector<T>::operator[](int index) {
-    if(!(index < 0 || index >= capacity)){
+T &JPVector<T>::operator[](int index) const {
+    if (!(index < 0 || index >= capacity)) {
         return data[index];
-    }else{
-        throw outOfRange();
+    } else {
+        throw outOfRangeVector();
     }
 }
 
 template<class T>
-T & JPVector<T>::at(int index){
-    if(!(index < 0 || index >= capacity)){
+T &JPVector<T>::at(int index) const {
+    if (!(index < 0 || index >= capacity)) {
         return data[index];
+    } else {
+        throw outOfRangeVector();
     }
 }
 
@@ -137,6 +149,7 @@ template<class T>
 int JPVector<T>::size() {
     return capacity;
 }
+
 template<class T>
 int JPVector<T>::max_size() {
     return max_capacity;
