@@ -2,7 +2,6 @@
 #include "JPVector.h"
 #include "JPString.h"
 
-
 TEST_CASE("JPString can be assigned based off of char* and JPString"){
     auto* jpString = new JPString();
     *jpString = "JPString";

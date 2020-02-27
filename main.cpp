@@ -7,21 +7,24 @@
 
 using namespace std;
 
-void parseThroughTheBookWithWord(JPString &, ifstream &);
+void parseThroughTheBookWithWord(JPString &, ifstream &);           //get the page number from the book by word
 
-void parseThroughTheBookWithPhrase(JPString &, ifstream &);
+void parseThroughTheBookWithPhrase(JPString &, ifstream &);         //get the page number from the book by phrase
 
-void populateJPVectorFromInput(JPVector<JPString *> &, ifstream &);
+void populateJPVectorFromInput(JPVector<JPString *> &,
+                               ifstream &); //get the input from the input file and put it into a JPVector
 
-long toPageNumber(JPString &);
+long toPageNumber(
+        JPString &);                                      //if the input from the book is a page number get the page number
 
-bool isPhrase(JPString &);
+bool isPhrase(
+        JPString &);                                          //check if the input from the input file is a word or a phrase
 
-bool printToFile(JPVector<JPString *> &, ofstream &);
+bool printToFile(JPVector<JPString *> &, ofstream &);               //print to the output file
 
-void sort(JPVector<JPString *> &inputVector);
+void sort(JPVector<JPString *> &inputVector);                       //use in the print to file to sort alphabetically
 
-void swap(JPVector<JPString *> &, int, int);
+void swap(JPVector<JPString *> &, int, int);                        //use in the sorting function
 
 int main(int argc, char **argv) {
     //if no arguments, run the catch tests
@@ -70,7 +73,7 @@ int main(int argc, char **argv) {
     outFile.close();
 
     return 0;
-}
+}                               //main driver function
 
 void populateJPVectorFromInput(JPVector<JPString *> &inputJPVector, ifstream &inFile) {
     char *line = new char[80];
@@ -78,6 +81,7 @@ void populateJPVectorFromInput(JPVector<JPString *> &inputJPVector, ifstream &in
     JPString *jpString = nullptr;
     while (!inFile.eof()) {
         inFile.getline(line, 80);
+        if (strcmp(line, "\0") == 0) { break; }
         jpStringRaw = new JPString(line);
         jpString = new JPString(jpStringRaw->lowercase());
         inputJPVector.push_back(jpString);
@@ -100,7 +104,7 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
             r++;
         }
         char *token = strtok(line, " \",:;.`?!");
-        bool boolPageNumber = false;
+        bool boolPageNumber;
         while (token != nullptr) {
             JPString JPToken(token);
             if (JPToken.size() > 0) {
@@ -145,7 +149,7 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
 long toPageNumber(JPString &jpString) {
     if (jpString.size() > 2) {
         char *temp = new char[jpString.size() - 1];
-        bool boolPageNumber = false;
+        bool boolPageNumber;
         try {
             boolPageNumber = jpString[0] == '<' && jpString[jpString.size() - 1] == '>';
         } catch (exception &e) {
@@ -208,7 +212,7 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
         }
         line[r] = '\0';
         char *token = strtok(line, " \",:;.`?!\r");
-        bool boolPageNumber = false;
+        bool boolPageNumber;
         word1 = token;
         while (token != nullptr) {
             if (word1.size() > 0) {
@@ -274,7 +278,7 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
 
 bool isPhrase(JPString &jpString) {
     for (int i = 0; i < jpString.size(); i++) {
-        bool Bool = false;
+        bool Bool;
         try{
             Bool = (jpString[i] == ' ' || jpString[i] == '.') && (jpString[jpString.size() - 1] != ' ');
         }catch(exception& e){
@@ -301,7 +305,7 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
         }
         bool isContained = false;
         for (int k = 0; k < letterVector.size(); k++) {
-            bool Bool = false;
+            bool Bool;
             try{
                 Bool = tempJPString[0] == letterVector[k];
             }catch(exception& e){
@@ -328,7 +332,7 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
             cout << e.what() << endl;
         }
         for (int j = 0; j < letterVector.size(); j++) {
-            bool Bool = false;
+            bool Bool;
             try{
                 Bool = tempJPString[0] == letterVector[j];
             }catch(exception& e){
@@ -336,8 +340,9 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
                 Bool = false;
             }
             if (Bool) {
+                char tempChar = toupper(letterVector[j]);
                 outFile << "[";
-                outFile << letterVector[j];
+                outFile << tempChar;
                 outFile << "]" << endl;
                 letterVector[j] = '\0';
             }
@@ -352,7 +357,7 @@ void sort(JPVector<JPString *> &inputVector) {
     for (i = 0; i < inputVector.size() - 1; i++) {
         min_idx = i;
         for (j = i + 1; j < inputVector.size(); j++) {
-            if ((*inputVector[j] < *inputVector[min_idx]) < 0) {
+            if ((*inputVector[j] < *inputVector[min_idx])) {
                 min_idx = j;
             }
         }

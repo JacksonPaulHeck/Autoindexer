@@ -11,17 +11,16 @@ set (EXE_NAME AutoIndexer)
 #   set (input02 "train_target.csv")
 # etc....
 # if you need more, add them here and in the foreach stmt below.
-set (input01 "input.txt")
-set (input02 "book.txt")
-set (input03 "")
+set(input01 "keywords1.txt")
+set(input02 "book1.txt")
 
 #
 ##########################################
 
 # Copy data files to build dir
-foreach(file IN LISTS input01 input02 input03)
+foreach (file IN LISTS input01 input02)
     configure_file(${file} ${file} COPYONLY)
-endforeach()
+endforeach ()
 
 set(CMAKE_CXX_STANDARD 17)
 add_executable(${EXE_NAME} main.cpp JPString.cpp catch.hpp test.cpp)
