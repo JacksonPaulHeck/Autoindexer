@@ -26,7 +26,7 @@ title structure: two noun phrases separated by a colon. Research article titles
 have been equated with newspaper headlines (Berkenkotter and Huckin, 1995) but
 <2>
 this particular format is not usually seen in headlines. Thus, while such
-titles may share certain pragmatic functions with headlines— to provide an
+titles may share certain pragmatic sentence-- functions with headlines— to provide an
 initial introduction, to attract attention, to inform, and sometimes to startle—
 even this very simple example illustrates the fact that they do not fulfil these
 functions in the same way. Both are subject to the same constraints of limited

@@ -3,10 +3,14 @@
 //
 #include <iostream>
 #include <cstring>
+#include <exception>
 #include "JPString.h"
 
 using namespace std;
 
+struct outOfRange : exception {
+    const char *what() const noexcept override { return "Index is out of range!\n"; }
+};
 //Empty Constructor
 JPString::JPString() {
     length = 0;
@@ -183,7 +187,7 @@ char &JPString::operator[](int i) const {
     if(i < length){
         return data[i];
     }else{
-        throw out_of_range("Index is out of range");
+        throw outOfRange();
     }
 }
 

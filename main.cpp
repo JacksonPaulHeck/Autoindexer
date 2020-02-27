@@ -26,7 +26,8 @@ void sort(JPVector<JPString *> &inputVector);                       //use in the
 
 void swap(JPVector<JPString *> &, int, int);                        //use in the sorting function
 
-int main(int argc, char **argv) {
+int main(int argc,
+         char **argv) {                                       //Questions to ask :: Does the keyword file contain a keyword with only punctuation? Help me fix my tests...
     //if no arguments, run the catch tests
     if (argc == 1) {
         Catch::Session().run();
@@ -76,11 +77,13 @@ int main(int argc, char **argv) {
 }                               //main driver function
 
 void populateJPVectorFromInput(JPVector<JPString *> &inputJPVector, ifstream &inFile) {
+    //creation of variables used in the function
     char *line = new char[80];
     JPString *jpStringRaw = nullptr;
     JPString *jpString = nullptr;
     while (!inFile.eof()) {
         inFile.getline(line, 80);
+        //check if the line is empty
         if (strcmp(line, "\0") == 0) { break; }
         jpStringRaw = new JPString(line);
         jpString = new JPString(jpStringRaw->lowercase());
@@ -140,8 +143,6 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
     }
     if (indexOfJPString.size() != 0) {
         jpString += indexOfJPString.at(indexOfJPString.size() - 1);
-    } else {
-        jpString += "-1";
     }
     delete[] line;
 }
@@ -267,8 +268,6 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
     }
     if (indexOfJPString.size() != 0) {
         jpString += indexOfJPString.at(indexOfJPString.size() - 1);
-    } else {
-        jpString += "-1";
     }
     for (int p = 0; p < tempVector.size(); p++) {
         delete tempVector.at(p);
