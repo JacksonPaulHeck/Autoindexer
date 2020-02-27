@@ -26,8 +26,7 @@ void sort(JPVector<JPString *> &inputVector);                       //use in the
 
 void swap(JPVector<JPString *> &, int, int);                        //use in the sorting function
 
-int main(int argc,
-         char **argv) {                                       //Questions to ask :: Does the keyword file contain a keyword with only punctuation? Help me fix my tests...
+int main(int argc, char **argv) {                                       //Questions to ask :: Does the keyword file contain a keyword with only punctuation? Help me fix my tests...
     //if no arguments, run the catch tests
     if (argc == 1) {
         Catch::Session().run();
@@ -346,7 +345,11 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
                 letterVector[j] = '\0';
             }
         }
-        outFile << *inputVector[i] << endl;
+        if(inputVector[i]->size() < 50) {
+            outFile << *inputVector[i] << endl;
+        }else{
+            outFile << inputVector[i]->substring(0,50) << endl;
+        }
     }
 }
 

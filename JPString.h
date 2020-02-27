@@ -52,5 +52,7 @@ public:
 
     JPString & lowercase();
 
+    JPString substring(int, int);
+
 };
 #endif //INC_20S_PA02_AUTOINDEXER_JHECKSMU_JPSTRING_H

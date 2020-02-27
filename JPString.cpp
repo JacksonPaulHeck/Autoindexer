@@ -252,3 +252,19 @@ bool operator>(const JPString &jpString, const JPString &jpString1) {
     int result = strcmp(jpString.data, jpString1.data);
     return result > 0;
 }
+
+JPString JPString::substring(int position, int len) {
+    if(length > (position + len)){
+        char* tempString = new char[length];
+        int i = 0;
+        for(i = 0; i < len; i++) {
+            tempString[i] = data[position+i];
+        }
+        tempString[i] = '\0';
+        JPString tempJPString(tempString);
+        delete [] tempString;
+        return tempJPString;
+    }else{
+        throw outOfRange();
+    }
+}
