@@ -1,15 +1,13 @@
 //
 // Created by jacks on 1/26/2020.
 //
-#include <iostream>
-#include <cstring>
-#include <exception>
+
 #include "JPString.h"
 
 using namespace std;
 
 struct outOfRange : exception {
-    const char *what() const noexcept override { return "Index is out of range!\n"; }
+    const char *what() const noexcept override { return "Index is out of range for JPString!\n"; }
 };
 //Empty Constructor
 JPString::JPString() {

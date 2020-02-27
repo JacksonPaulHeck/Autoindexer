@@ -23,12 +23,23 @@ TEST_CASE("JPString can be assigned based off of char* and JPString"){
 TEST_CASE("JPString can throw exception for out of bounds") {
     auto *jpString3 = new JPString("JPString");
     try {
-        JPString tempJPString(*jpString3);
-        char tempChar = tempJPString[100];
+        jpString3[100];
     } catch (exception &e) {
         cout << e.what();
     }
     delete jpString3;
+}
+
+TEST_CASE("JPVector can throw exception for out of bounds") {
+    auto *jpVector1 = new JPVector<char>();
+    jpVector1->push_back('J');
+    jpVector1->push_back('P');
+    try {
+        jpVector1[100];
+    } catch (exception &e) {
+        cout << e.what();
+    }
+    delete jpVector1;
 }
 
 TEST_CASE("JPVector can be sized and resized", "[JPVector]") {

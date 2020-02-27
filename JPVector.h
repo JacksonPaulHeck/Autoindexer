@@ -6,6 +6,10 @@
 
 using namespace std;
 
+struct outOfRange : exception {
+    const char *what() const noexcept override { return "Index is out of range for JPVector!\n"; }
+};
+
 template <class T>
 class JPVector{
     private:
@@ -117,6 +121,8 @@ template<class T>
 T &JPVector<T>::operator[](int index) {
     if(!(index < 0 || index >= capacity)){
         return data[index];
+    }else{
+        throw outOfRange();
     }
 }
 

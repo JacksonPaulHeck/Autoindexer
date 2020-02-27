@@ -11,14 +11,11 @@ void parseThroughTheBookWithWord(JPString &, ifstream &);           //get the pa
 
 void parseThroughTheBookWithPhrase(JPString &, ifstream &);         //get the page number from the book by phrase
 
-void populateJPVectorFromInput(JPVector<JPString *> &,
-                               ifstream &); //get the input from the input file and put it into a JPVector
+void populateJPVectorFromInput(JPVector<JPString *> &, ifstream &); //get the input from the input file and put it into a JPVector
 
-long toPageNumber(
-        JPString &);                                      //if the input from the book is a page number get the page number
+long toPageNumber(JPString &);                                      //if the input from the book is a page number get the page number
 
-bool isPhrase(
-        JPString &);                                          //check if the input from the input file is a word or a phrase
+bool isPhrase(JPString &);                                          //check if the input from the input file is a word or a phrase
 
 bool printToFile(JPVector<JPString *> &, ofstream &);               //print to the output file
 
@@ -26,7 +23,8 @@ void sort(JPVector<JPString *> &inputVector);                       //use in the
 
 void swap(JPVector<JPString *> &, int, int);                        //use in the sorting function
 
-int main(int argc, char **argv) {                                       //Questions to ask :: Does the keyword file contain a keyword with only punctuation? Help me fix my tests...
+int main(int argc,
+         char **argv) {                                       //Questions to ask :: Does the keyword file contain a keyword with only punctuation? Help me fix my tests...
     //if no arguments, run the catch tests
     if (argc == 1) {
         Catch::Session().run();
@@ -77,11 +75,11 @@ int main(int argc, char **argv) {                                       //Questi
 
 void populateJPVectorFromInput(JPVector<JPString *> &inputJPVector, ifstream &inFile) {
     //creation of variables used in the function
-    char *line = new char[80];
+    char *line = new char[100];
     JPString *jpStringRaw = nullptr;
     JPString *jpString = nullptr;
     while (!inFile.eof()) {
-        inFile.getline(line, 80);
+        inFile.getline(line, 100);
         //check if the line is empty
         if (strcmp(line, "\0") == 0) { break; }
         jpStringRaw = new JPString(line);
@@ -112,7 +110,7 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
             if (JPToken.size() > 0) {
                 try {
                     boolPageNumber = JPToken[0] == '<' && JPToken[JPToken.size() - 1] == '>';
-                } catch (exception& e) {
+                } catch (exception &e) {
                     boolPageNumber = false;
                     cout << e.what() << endl;
                 }
@@ -174,7 +172,7 @@ long toPageNumber(JPString &jpString) {
 
 void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
     JPVector<JPString *> tempVector;
-    char *temp = new char[80];
+    char *temp = new char[100];
     int e = 0;
     for (e = 0; e < jpString.size(); e++) {
         try {
@@ -218,7 +216,7 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
             if (word1.size() > 0) {
                 try {
                     boolPageNumber = word1[0] == '<' && word1[word1.size() - 1] == '>';
-                } catch (exception& e) {
+                } catch (exception &e) {
                     boolPageNumber = false;
                     cout << e.what() << endl;
                 }
@@ -277,9 +275,9 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
 bool isPhrase(JPString &jpString) {
     for (int i = 0; i < jpString.size(); i++) {
         bool Bool;
-        try{
+        try {
             Bool = (jpString[i] == ' ' || jpString[i] == '.') && (jpString[jpString.size() - 1] != ' ');
-        }catch(exception& e){
+        } catch (exception &e) {
             cout << e.what() << endl;
             Bool = false;
         }
@@ -298,15 +296,15 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
     for (int j = 0; j < inputVector.size(); j++) {
         try {
             tempJPString = *inputVector[j];
-        }catch(exception& e){
+        } catch (exception &e) {
             cout << e.what() << endl;
         }
         bool isContained = false;
         for (int k = 0; k < letterVector.size(); k++) {
             bool Bool;
-            try{
+            try {
                 Bool = tempJPString[0] == letterVector[k];
-            }catch(exception& e){
+            } catch (exception &e) {
                 cout << e.what() << endl;
                 Bool = false;
             }
@@ -316,9 +314,9 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
             }
         }
         if (!isContained) {
-            try{
+            try {
                 letterVector.push_back(tempJPString[0]);
-            }catch(exception& e){
+            } catch (exception &e) {
                 cout << e.what() << endl;
             }
         }
@@ -326,14 +324,14 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
     for (int i = 0; i < inputVector.size(); i++) {
         try {
             tempJPString = *inputVector[i];
-        }catch(exception& e){
+        } catch (exception &e) {
             cout << e.what() << endl;
         }
         for (int j = 0; j < letterVector.size(); j++) {
             bool Bool;
-            try{
+            try {
                 Bool = tempJPString[0] == letterVector[j];
-            }catch(exception& e){
+            } catch (exception &e) {
                 cout << e.what() << endl;
                 Bool = false;
             }
@@ -345,10 +343,10 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
                 letterVector[j] = '\0';
             }
         }
-        if(inputVector[i]->size() < 50) {
+        try {
             outFile << *inputVector[i] << endl;
-        }else{
-            outFile << inputVector[i]->substring(0,50) << endl;
+        } catch (exception &e) {
+            cout << e.what() << endl;
         }
     }
 }

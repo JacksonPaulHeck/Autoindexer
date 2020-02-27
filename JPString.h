@@ -1,7 +1,9 @@
 //
 // Created by jacks on 1/26/2020.
 //
-# include <iostream>
+#include <iostream>
+#include <cstring>
+#include <exception>
 
 #ifndef INC_20S_PA02_AUTOINDEXER_JHECKSMU_JPSTRING_H
 #define INC_20S_PA02_AUTOINDEXER_JHECKSMU_JPSTRING_H
