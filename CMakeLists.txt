@@ -23,4 +23,4 @@ foreach (file IN LISTS input01 input02)
 endforeach ()
 
 set(CMAKE_CXX_STANDARD 17)
-add_executable(${EXE_NAME} main.cpp JPString.cpp catch.hpp test.cpp)
+add_executable(${EXE_NAME} main.cpp JPString.cpp catch.hpp test.cpp Driver.cpp)

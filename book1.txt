@@ -25,7 +25,7 @@ has been chosen with more than usual care since it serves not just as a title
 for this paper, but as an illustration of what is now a common research paper
 title structure: two noun phrases separated by a colon. Research article titles
 have been equated with newspaper headlines (Berkenkotter and Huckin, 1995) but
-<2>
+<1000>
 this particular format is not usually seen in headlines. Thus, while such
 titles may share certain pragmatic sentence-- functions with headlines— to provide an
 initial introduction, to attract attention, to inform, and sometimes to startle—
