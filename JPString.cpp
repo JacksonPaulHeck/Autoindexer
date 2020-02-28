@@ -121,7 +121,7 @@ bool operator==(const JPString &jpString, const char *jpString1) {
 
 //Anti-Equality Comparison Operator
 bool JPString::operator!=(char character) {
-    return *this->data != character;
+    return *this->data == character;
 }
 
 //this  = this + something else
@@ -232,13 +232,13 @@ bool JPString::operator!=(const JPString &testingJPString) {
         while (i < testingJPString.size() && i < length) {
             output = testingJPString[i] == data[i];
             if (!output) {
-                return false;
+                return true;
             }
             i++;
         }
-        return true;
+        return false;
     }
-    return false;
+    return true;
 }
 
 bool operator<(const JPString &compareString, const JPString &comparedString) {
