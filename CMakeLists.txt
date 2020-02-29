@@ -13,7 +13,6 @@ set (EXE_NAME AutoIndexer)
 # if you need more, add them here and in the foreach stmt below.
 set(input01 "keywords1.txt")
 set(input02 "book1.txt")
-
 #
 ##########################################
 

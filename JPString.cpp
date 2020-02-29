@@ -250,7 +250,7 @@ bool operator>(const JPString &jpString, const JPString &jpString1) {
     int result = strcmp(jpString.data, jpString1.data);
     return result > 0;
 }
-
+//substring operator
 JPString JPString::substring(int position, int len) {
     if (length > (position + len)) {
         char *tempString = new char[length];

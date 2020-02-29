@@ -44,21 +44,21 @@ public:
 };
 
 template<class T>
-JPVector<T>::JPVector() {
+JPVector<T>::JPVector() { //Empty Constructor
     max_capacity = 1;
     capacity = 0;
     data = new T[max_capacity];
 }
 
 template<class T>
-JPVector<T>::JPVector(int Size) {
+JPVector<T>::JPVector(int Size) { //Constructor based off of defined size
     capacity = Size;
     max_capacity = Size;
     data = new T[Size];
 }
 
 template<class T>
-JPVector<T>::JPVector(JPVector<T> &vector) {
+JPVector<T>::JPVector(JPVector<T> &vector) { //Copy Constructor
     capacity = vector.capacity;
     max_capacity = vector.max_capacity;
     data = new T[max_capacity];
@@ -68,14 +68,14 @@ JPVector<T>::JPVector(JPVector<T> &vector) {
 }
 
 template<class T>
-JPVector<T>::~JPVector() {
+JPVector<T>::~JPVector() { //Destructor
     if (data != NULL) {
         delete[] data;
     }
 }
 
 template<class T>
-JPVector<T> &JPVector<T>::operator=(const JPVector<T> &jpVector) {
+JPVector<T> &JPVector<T>::operator=(const JPVector<T> &jpVector) { //Assignment operator from another JPVector
     if (this != &jpVector) {
         delete[] data;
         capacity = jpVector.capacity;
@@ -89,7 +89,7 @@ JPVector<T> &JPVector<T>::operator=(const JPVector<T> &jpVector) {
 }
 
 template<class T>
-void JPVector<T>::resize() {
+void JPVector<T>::resize() { //resize used if the vector needs to grow
     T *temp = new T[max_capacity * 2];
     for (int i = 0; i < max_capacity; i++) {
         temp[i] = data[i];
@@ -100,7 +100,7 @@ void JPVector<T>::resize() {
 }
 
 template<class T>
-void JPVector<T>::push_back(const T &Data) {
+void JPVector<T>::push_back(const T &Data) { //adds an element to the end of the vector
     T *temp = new T[capacity + 1];
     for (int i = 0; i < capacity; i++) {
         temp[i] = data[i];
@@ -115,7 +115,7 @@ void JPVector<T>::push_back(const T &Data) {
 }
 
 template<class T>
-void JPVector<T>::pop_back() {
+void JPVector<T>::pop_back() { //pops the last element off of the vector
     if (capacity > 0) {
         T *temp = new T[capacity];
         for (int i = 0; i < capacity - 1; i++) {
@@ -128,7 +128,7 @@ void JPVector<T>::pop_back() {
 }
 
 template<class T>
-T &JPVector<T>::operator[](int index) const {
+T &JPVector<T>::operator[](int index) const { //subscript operator
     if (!(index < 0 || index >= capacity)) {
         return data[index];
     } else {
@@ -137,7 +137,7 @@ T &JPVector<T>::operator[](int index) const {
 }
 
 template<class T>
-T &JPVector<T>::at(int index) const {
+T &JPVector<T>::at(int index) const { //subscript operator
     if (!(index < 0 || index >= capacity)) {
         return data[index];
     } else {
@@ -146,12 +146,12 @@ T &JPVector<T>::at(int index) const {
 }
 
 template<class T>
-int JPVector<T>::size() {
+int JPVector<T>::size() { //check the size of the vector
     return capacity;
 }
 
 template<class T>
-int JPVector<T>::max_size() {
+int JPVector<T>::max_size() { //check the max_capacity of the vector
     return max_capacity;
 }
 

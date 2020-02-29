@@ -4,7 +4,6 @@
 
 #include "Driver.h"
 #include <iostream>
-#include <fstream>
 #include "JPString.h"
 #include "JPVector.h"
 
@@ -35,81 +34,75 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
     JPVector<int> indexOfJPString;
     bookIn.clear(); //reset the bookIn ifstream in case it has been called and the line runner has been moved
     bookIn.seekg(0, ios::beg);
-    int i = 0;
-    while(!bookIn.eof()) {
+    while(!bookIn.eof()) { //parse through the book line by line until the end
         bookIn.getline(line, 256);
         int r = 0;
-        while (line[r] != '\0') {
+        while (line[r] != '\0') { //parse through each line and make it lowercase
             line[r] = tolower(line[r]);
             r++;
         }
-        char *token = strtok(line, " \",:;.`?!");
+        char *token = strtok(line, " \",:;.`?!"); //get each word in the line and set it to token
         bool boolPageNumber;
-        while (token != nullptr) {
+        while (token != nullptr) { //check if the token is empty i.e. end of the line
             JPString JPToken(token);
-            if (JPToken.size() > 0) {
+            if (JPToken.size() > 0) { //check again if the token now JPToken is empty
                 try {
-                    boolPageNumber = JPToken[0] == '<' && JPToken[JPToken.size() - 1] == '>';
+                    boolPageNumber = JPToken[0] == '<' && JPToken[JPToken.size() - 1] == '>'; //check if the token has the possibility to be a page number
                 } catch (exception &e) {
                     boolPageNumber = false;
                     cout << e.what() << endl;
                 }
-                if (boolPageNumber) {
+                if (boolPageNumber) { //if it has the possibility to be a page numeber then get the page number
                     pageNumber = toPageNumber(JPToken);
-                } else if (JPToken == jpString) {
+                } else if (JPToken == jpString) { //else check if the token is equal to the passed string
                     bool containsPageNumber = false;
-                    for (int k = 0; k < indexOfJPString.size(); k++) {
-                        if (pageNumber == indexOfJPString.at(k)) {
+                    for (int k = 0; k < indexOfJPString.size(); k++) { //check if the page number is already included in the page number vector
+                        if (pageNumber == indexOfJPString.at(k)) { //if the page number is in the vector then break out of the loop
                             containsPageNumber = true;
                             k = indexOfJPString.size();
                         }
                     }
-                    if (!containsPageNumber) {
+                    if (!containsPageNumber) { //if the page number is not in the vector then add the page number to the vector
                         indexOfJPString.push_back(pageNumber);
                     }
                 }
             }
-            token = strtok(NULL, " \",:;.`?!");
+            token = strtok(NULL, " \",:;.`?!"); //get the next token
         }
         delete[] token;
-        i++;
     }
-    sortIndexes(indexOfJPString);
+    sortIndexes(indexOfJPString); //sort the indexes into assending value
     jpString += ": ";
-    for (int p = 0; p < indexOfJPString.size() - 1; p++) {
+    for (int p = 0; p < indexOfJPString.size() - 1; p++) { //add each of the indexes to the JPString
         jpString += indexOfJPString.at(p);
         jpString += ", ";
     }
-    if (indexOfJPString.size() != 0) {
+    if (indexOfJPString.size() != 0) { //add the last index to the end of the JPString
         jpString += indexOfJPString.at(indexOfJPString.size() - 1);
     }
     delete[] line;
 }
 
 long toPageNumber(JPString &jpString) {
-    // if the JPString can contain a page number
-    if (jpString.size() > 2) {
+    if (jpString.size() > 2) {// if the JPString can contain a page number
         char *temp = new char[jpString.size() - 1];
         bool boolPageNumber;
         try {
-            boolPageNumber = jpString[0] == '<' && jpString[jpString.size() - 1] == '>';
+            boolPageNumber = jpString[0] == '<' && jpString[jpString.size() - 1] == '>'; //check again if the JPString can be a page number
         } catch (exception &e) {
             boolPageNumber = false;
             cout << e.what() << endl;
         }
-        //if it is in the page number format
-        if (boolPageNumber) {
-            for (int i = 1; i < jpString.size(); i++) {
+        if (boolPageNumber) {//if it is in the page number format
+            for (int i = 1; i < jpString.size(); i++) { //iterate through the string
                 try {
-                    //put everything inside the <> brackets into a temp char*
-                    temp[i - 1] = jpString[i];
+                    temp[i - 1] = jpString[i]; //put everything inside the <> brackets into a temp char*
                 } catch (exception &e) {
                     cout << e.what() << endl;
                 }
             }
         }
-        //get the value of the page number
-        int i = atoi(temp);
+        int i = atoi(temp); //get the value of the page number
         delete[] temp;
         return i;
     }
@@ -120,7 +113,7 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
     JPVector<JPString *> tempVector;
     char *temp = new char[100];
     int e = 0;
-    for (e = 0; e < jpString.size(); e++) {
+    for (e = 0; e < jpString.size(); e++) { //parse through the string and set it equal to a temp
         try {
             temp[e] = jpString[e];
         } catch (exception &e) {
@@ -128,8 +121,8 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
         }
     }
     temp[e] = '\0';
-    char *JPToken = strtok(temp, " \",:;.`?!");
-    while (JPToken != nullptr) {
+    char *JPToken = strtok(temp, " \",:;.`?!"); //delimit the temp variable and put it into a token
+    while (JPToken != nullptr) { //check if the token is a nullptr if not, add it to a vector of JPStrings
         auto *tempJPString = new JPString(JPToken);
         tempVector.push_back(tempJPString);
         JPToken = strtok(nullptr, " \",:;.`?!");
@@ -137,58 +130,58 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
     delete[] JPToken;
     delete[] temp;
     long pageNumber = 0;
-    bookIn.clear();                 // clear fail and eof bits
+    bookIn.clear(); //these two lines reset the file back to the beginning
     bookIn.seekg(0, ios::beg);
     JPVector<int> indexOfJPString;
     JPString word1;
     int i = 0;
     char *line = new char[512];
     char *line2 = new char[512];
-    bookIn.getline(line, 256);
+    bookIn.getline(line, 256); //get two lines at a time
     bookIn.getline(line2, 256);
-    while (!bookIn.eof()) {
-        strcat(line, " ");
+    while (!bookIn.eof()) { //parse through the book line by line
+        strcat(line, " "); //these two lines concatonate two lines into one
         strcat(line, line2);
         int r = 0;
-        while (line[r] != '\0') {
+        while (line[r] != '\0') { //make the full line lowercase
             line[r] = tolower(line[r]);
             r++;
         }
         line[r] = '\0';
-        char *token = strtok(line, " \",:;.`?!\r");
+        char *token = strtok(line, " \",:;.`?!\r"); //delimit the line and store the value into a token.
         bool boolPageNumber;
         word1 = token;
-        while (token != nullptr) {
-            if (word1.size() > 0) {
+        while (token != nullptr) { //check if the token is a nullptr
+            if (word1.size() > 0) { //make sure the token, now stored in word1, is not empty
                 try {
-                    boolPageNumber = word1[0] == '<' && word1[word1.size() - 1] == '>';
+                    boolPageNumber = word1[0] == '<' && word1[word1.size() - 1] == '>'; //check if the line is a page number
                 } catch (exception &e) {
                     boolPageNumber = false;
                     cout << e.what() << endl;
                 }
-                if (boolPageNumber) {
+                if (boolPageNumber) { //if the line is a page number
                     pageNumber = toPageNumber(word1);
-                } else if (word1 == *tempVector.at(0)) {
+                } else if (word1 == *tempVector.at(0)) { //check if the word is in the temp vector
                     bool containsPageNumber = false;
                     bool isEqual = true;
                     bool isEqualToWord;
-                    for (int w = 0; w < tempVector.size(); w++) {
+                    for (int w = 0; w < tempVector.size(); w++) { //parse through the temp vector
                         word1 = token;
-                        isEqualToWord = (word1 == *tempVector.at(w));
+                        isEqualToWord = (word1 == *tempVector.at(w)); //check if the word is in the temp vector
                         if (isEqualToWord) {
-                            token = strtok(nullptr, " \",:;.`?!\r");
+                            token = strtok(nullptr, " \",:;.`?!\r"); //delimit the next word and store in token
                         } else {
                             isEqual = false;
                             break;
                         }
                     }
-                    for (int k = 0; k < indexOfJPString.size(); k++) {
-                        if (pageNumber == indexOfJPString.at(k)) {
+                    for (int k = 0; k < indexOfJPString.size(); k++) { //parse through the index vector
+                        if (pageNumber == indexOfJPString.at(k)) { //if the page number is in the index vector then break
                             containsPageNumber = true;
                             k = indexOfJPString.size();
                         }
                     }
-                    if (!containsPageNumber && isEqual) {
+                    if (!containsPageNumber && isEqual) { //if the index is not in the index vector and the phrase is equal then add it to the index vector
                         indexOfJPString.push_back(pageNumber);
                     }
                 }
@@ -198,29 +191,29 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
         }
         delete[] token;
         i++;
-        strcpy(line, line2);
-        bookIn.getline(line2, 256);
+        strcpy(line, line2); //copy the second line into the first
+        bookIn.getline(line2, 256); //put the next line into the "second line"
     }
     delete[] line;
     delete[] line2;
 
-    sortIndexes(indexOfJPString);
+    sortIndexes(indexOfJPString); //sort the indexes in numerical order
 
     jpString += ": ";
-    for (int p = 0; p < indexOfJPString.size() - 1; p++) {
+    for (int p = 0; p < indexOfJPString.size() - 1; p++) { //add each index to the end of the JPString
         jpString += indexOfJPString.at(p);
         jpString += ", ";
     }
-    if (indexOfJPString.size() != 0) {
+    if (indexOfJPString.size() != 0) { //add the last index to the end
         jpString += indexOfJPString.at(indexOfJPString.size() - 1);
     }
-    for (int p = 0; p < tempVector.size(); p++) {
+    for (int p = 0; p < tempVector.size(); p++) { //delete the elements in the temp vector to conserve memory
         delete tempVector.at(p);
     }
 
 }
 
-void sortIndexes(JPVector<int> & indexVector) {
+void sortIndexes(JPVector<int> & indexVector) { //this function uses a selection sort to sort the indexes into ascending order
     int i, j, min_idx;
 
     for (i = 0; i < indexVector.size() - 1; i++) {
@@ -234,11 +227,11 @@ void sortIndexes(JPVector<int> & indexVector) {
     }
 }
 
-bool isPhrase(JPString &jpString) {
-    for (int i = 0; i < jpString.size(); i++) {
+bool isPhrase(JPString &jpString) { //function to check if the input from the keyword file is a phrase
+    for (int i = 0; i < jpString.size(); i++) { //parse through the string character by character
         bool Bool;
         try {
-            Bool = (jpString[i] == ' ' || jpString[i] == '.') && (jpString[jpString.size() - 1] != ' ');
+            Bool = (jpString[i] == ' ' || jpString[i] == '.') && (jpString[jpString.size() - 1] != ' '); //check if the string contains a space or a period and that it does not have a space at the end
         } catch (exception &e) {
             cout << e.what() << endl;
             Bool = false;
@@ -250,22 +243,22 @@ bool isPhrase(JPString &jpString) {
     return false;
 }
 
-bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
-    sort(inputVector);
+bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) { //this function prints to the output file using the correct format
+    sort(inputVector); //sort the input vector alphabetically
     JPVector<char> letterVector;
     JPString tempJPString;
     letterVector.push_back(' ');
-    for (int j = 0; j < inputVector.size(); j++) {
+    for (int j = 0; j < inputVector.size(); j++) { //parse through the input vector(a vector of JPString*s)
         try {
             tempJPString = *inputVector[j];
         } catch (exception &e) {
             cout << e.what() << endl;
         }
         bool isContained = false;
-        for (int k = 0; k < letterVector.size(); k++) {
+        for (int k = 0; k < letterVector.size(); k++) { //parse through by the letter vector
             bool Bool;
             try {
-                Bool = tempJPString[0] == letterVector[k];
+                Bool = tempJPString[0] == letterVector[k]; //check if the first letter of the JPString is in the letter vector
             } catch (exception &e) {
                 cout << e.what() << endl;
                 Bool = false;
@@ -275,7 +268,7 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
                 continue;
             }
         }
-        if (!isContained) {
+        if (!isContained) { //if the letter vector does not have the first letter then add it to it
             try {
                 letterVector.push_back(tempJPString[0]);
             } catch (exception &e) {
@@ -283,13 +276,13 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
             }
         }
     }
-    for (int i = 0; i < inputVector.size(); i++) {
+    for (int i = 0; i < inputVector.size(); i++) { //parse through the input vector
         try {
             tempJPString = *inputVector[i];
         } catch (exception &e) {
             cout << e.what() << endl;
         }
-        for (int j = 0; j < letterVector.size(); j++) {
+        for (int j = 0; j < letterVector.size(); j++) { //parse the letter vector and tell if the first letter of the JPString equals one of the letter vectors
             bool Bool;
             try {
                 Bool = tempJPString[0] == letterVector[j];
@@ -297,7 +290,7 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
                 cout << e.what() << endl;
                 Bool = false;
             }
-            if (Bool) {
+            if (Bool) { //if the first letter of the string equals a letter vector then output it to the file in the form [CAPITAL LETTER]
                 char tempChar = toupper(letterVector[j]);
                 outFile << "[";
                 outFile << tempChar;
@@ -305,7 +298,7 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
                 letterVector[j] = '\0';
             }
         }
-        try {
+        try { //finally, output the word + the pagenumber JPString object to the output file.
             outFile << *inputVector[i] << endl;
         } catch (exception &e) {
             cout << e.what() << endl;
@@ -313,7 +306,7 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) {
     }
 }
 
-void sort(JPVector<JPString *> &inputVector) {
+void sort(JPVector<JPString *> &inputVector) { //sorts the input vector in alphabetical order with a selection sort
     int i, j, min_idx;
 
     for (i = 0; i < inputVector.size() - 1; i++) {
@@ -327,13 +320,13 @@ void sort(JPVector<JPString *> &inputVector) {
     }
 }
 
-void swap(JPVector<JPString *> &inputVector, int min_idx, int i) {
+void swap(JPVector<JPString *> &inputVector, int min_idx, int i) { //used by selection sort
     JPString *temp = inputVector[min_idx];
     inputVector[min_idx] = inputVector[i];
     inputVector[i] = temp;
 }
 
-void swapIndexes(JPVector<int> &inputVector, int min_idx, int i) {
+void swapIndexes(JPVector<int> &inputVector, int min_idx, int i) { //used by selection sort
     int temp = inputVector[min_idx];
     inputVector[min_idx] = inputVector[i];
     inputVector[i] = temp;
