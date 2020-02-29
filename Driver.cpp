@@ -4,6 +4,7 @@
 
 #include "Driver.h"
 #include <iostream>
+#include <fstream>
 #include "JPString.h"
 #include "JPVector.h"
 
@@ -34,7 +35,7 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
     JPVector<int> indexOfJPString;
     bookIn.clear(); //reset the bookIn ifstream in case it has been called and the line runner has been moved
     bookIn.seekg(0, ios::beg);
-    while(!bookIn.eof()) { //parse through the book line by line until the end
+    while (!bookIn.eof()) { //parse through the book line by line until the end
         bookIn.getline(line, 256);
         int r = 0;
         while (line[r] != '\0') { //parse through each line and make it lowercase
@@ -47,7 +48,8 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
             JPString JPToken(token);
             if (JPToken.size() > 0) { //check again if the token now JPToken is empty
                 try {
-                    boolPageNumber = JPToken[0] == '<' && JPToken[JPToken.size() - 1] == '>'; //check if the token has the possibility to be a page number
+                    boolPageNumber = JPToken[0] == '<' && JPToken[JPToken.size() - 1] ==
+                                                          '>'; //check if the token has the possibility to be a page number
                 } catch (exception &e) {
                     boolPageNumber = false;
                     cout << e.what() << endl;
@@ -56,8 +58,10 @@ void parseThroughTheBookWithWord(JPString &jpString, ifstream &bookIn) {
                     pageNumber = toPageNumber(JPToken);
                 } else if (JPToken == jpString) { //else check if the token is equal to the passed string
                     bool containsPageNumber = false;
-                    for (int k = 0; k < indexOfJPString.size(); k++) { //check if the page number is already included in the page number vector
-                        if (pageNumber == indexOfJPString.at(k)) { //if the page number is in the vector then break out of the loop
+                    for (int k = 0; k <
+                                    indexOfJPString.size(); k++) { //check if the page number is already included in the page number vector
+                        if (pageNumber ==
+                            indexOfJPString.at(k)) { //if the page number is in the vector then break out of the loop
                             containsPageNumber = true;
                             k = indexOfJPString.size();
                         }
@@ -88,7 +92,8 @@ long toPageNumber(JPString &jpString) {
         char *temp = new char[jpString.size() - 1];
         bool boolPageNumber;
         try {
-            boolPageNumber = jpString[0] == '<' && jpString[jpString.size() - 1] == '>'; //check again if the JPString can be a page number
+            boolPageNumber = jpString[0] == '<' &&
+                             jpString[jpString.size() - 1] == '>'; //check again if the JPString can be a page number
         } catch (exception &e) {
             boolPageNumber = false;
             cout << e.what() << endl;
@@ -154,7 +159,8 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
         while (token != nullptr) { //check if the token is a nullptr
             if (word1.size() > 0) { //make sure the token, now stored in word1, is not empty
                 try {
-                    boolPageNumber = word1[0] == '<' && word1[word1.size() - 1] == '>'; //check if the line is a page number
+                    boolPageNumber =
+                            word1[0] == '<' && word1[word1.size() - 1] == '>'; //check if the line is a page number
                 } catch (exception &e) {
                     boolPageNumber = false;
                     cout << e.what() << endl;
@@ -176,12 +182,14 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
                         }
                     }
                     for (int k = 0; k < indexOfJPString.size(); k++) { //parse through the index vector
-                        if (pageNumber == indexOfJPString.at(k)) { //if the page number is in the index vector then break
+                        if (pageNumber ==
+                            indexOfJPString.at(k)) { //if the page number is in the index vector then break
                             containsPageNumber = true;
                             k = indexOfJPString.size();
                         }
                     }
-                    if (!containsPageNumber && isEqual) { //if the index is not in the index vector and the phrase is equal then add it to the index vector
+                    if (!containsPageNumber &&
+                        isEqual) { //if the index is not in the index vector and the phrase is equal then add it to the index vector
                         indexOfJPString.push_back(pageNumber);
                     }
                 }
@@ -213,7 +221,8 @@ void parseThroughTheBookWithPhrase(JPString &jpString, ifstream &bookIn) {
 
 }
 
-void sortIndexes(JPVector<int> & indexVector) { //this function uses a selection sort to sort the indexes into ascending order
+void
+sortIndexes(JPVector<int> &indexVector) { //this function uses a selection sort to sort the indexes into ascending order
     int i, j, min_idx;
 
     for (i = 0; i < indexVector.size() - 1; i++) {
@@ -231,7 +240,8 @@ bool isPhrase(JPString &jpString) { //function to check if the input from the ke
     for (int i = 0; i < jpString.size(); i++) { //parse through the string character by character
         bool Bool;
         try {
-            Bool = (jpString[i] == ' ' || jpString[i] == '.') && (jpString[jpString.size() - 1] != ' '); //check if the string contains a space or a period and that it does not have a space at the end
+            Bool = (jpString[i] == ' ' || jpString[i] == '.') && (jpString[jpString.size() - 1] !=
+                                                                  ' '); //check if the string contains a space or a period and that it does not have a space at the end
         } catch (exception &e) {
             cout << e.what() << endl;
             Bool = false;
@@ -243,7 +253,8 @@ bool isPhrase(JPString &jpString) { //function to check if the input from the ke
     return false;
 }
 
-bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) { //this function prints to the output file using the correct format
+bool printToFile(JPVector<JPString *> &inputVector,
+                 ofstream &outFile) { //this function prints to the output file using the correct format
     sort(inputVector); //sort the input vector alphabetically
     JPVector<char> letterVector;
     JPString tempJPString;
@@ -258,7 +269,8 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) { //this 
         for (int k = 0; k < letterVector.size(); k++) { //parse through by the letter vector
             bool Bool;
             try {
-                Bool = tempJPString[0] == letterVector[k]; //check if the first letter of the JPString is in the letter vector
+                Bool = tempJPString[0] ==
+                       letterVector[k]; //check if the first letter of the JPString is in the letter vector
             } catch (exception &e) {
                 cout << e.what() << endl;
                 Bool = false;
@@ -282,7 +294,8 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) { //this 
         } catch (exception &e) {
             cout << e.what() << endl;
         }
-        for (int j = 0; j < letterVector.size(); j++) { //parse the letter vector and tell if the first letter of the JPString equals one of the letter vectors
+        for (int j = 0; j <
+                        letterVector.size(); j++) { //parse the letter vector and tell if the first letter of the JPString equals one of the letter vectors
             bool Bool;
             try {
                 Bool = tempJPString[0] == letterVector[j];
@@ -299,7 +312,17 @@ bool printToFile(JPVector<JPString *> &inputVector, ofstream &outFile) { //this 
             }
         }
         try { //finally, output the word + the pagenumber JPString object to the output file.
-            outFile << *inputVector[i] << endl;
+            int j = 0;
+            while(j < inputVector[i]->size()){ //while the iterator variable is less than each strings size
+                if((j%50 != 0) || (j == 0)){ //if not divisible by 50 or is 0 then output the character at that position
+                    outFile << inputVector[i]->operator[](j);
+                }else{ //else output in the correct format
+                    outFile << endl;
+                    outFile << "    " << inputVector[i]->operator[](j);
+                }
+                j++;
+            }
+            outFile << endl;
         } catch (exception &e) {
             cout << e.what() << endl;
         }
