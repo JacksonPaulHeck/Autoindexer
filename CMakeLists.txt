@@ -4,9 +4,10 @@ set (EXE_NAME AutoIndexer)
 
 set(input01 "test/keywords.txt")
 set(input02 "test/WarAndPeaceBook1.txt")
+set(output01 "output/output.txt")
 
 # Copy data files to build dir
-foreach (file IN LISTS input01 input02)
+foreach (file IN LISTS input01 input02 output01)
     configure_file(${file} ${file} COPYONLY)
 endforeach ()
 
