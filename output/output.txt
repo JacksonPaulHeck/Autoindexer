@@ -1,31 +1,57 @@
-[1]
-1: 1, 3, 4, 10
-[3]
-3.1.: 4
 [A]
-aasdkfafsfdf: 
-analysis: 1, 3, 6, 13, 14, 1000
-and we they it are you them i never ans youre when
-    : 1
+ability: 3
+[B]
+babies: 27
 [C]
-contribution: 3, 14
+cackle: 19
+[D]
+daily: 25
 [E]
-enigma: 14
-eternally: 5
+each: 2, 3, 14, 18, 22, 23, 26, 27
 [F]
-field: 4, 6, 10, 11, 12, 13
-form: 1, 3, 6, 7, 8, 9, 10, 11, 12, 1000
-full-sentence: 3, 4, 5, 6, 7, 8, 9, 11
+face: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1
+    4, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+     28
+[G]
+gaiety: 19
+[H]
+ha: 28
 [I]
-intriguing: 8, 14
+i: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 
+    15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28
 [J]
-journal: 6, 11, 1000
+jacket: 11
+[K]
+keen: 28
+[L]
+lady: 2, 3, 4, 5, 7, 11, 12, 14, 18, 20, 21, 22, 2
+    3
+[M]
+machine: 2
 [N]
-noun phrases with or without postmodification. ver
-    y clear-cut differences in noun phrases with: 1
+nail: 25
 [O]
-optimism: 5
+oak: 9
+[P]
+paced: 25, 28
+[Q]
+qualities: 8
+[R]
+race: 21
 [S]
-sentence--: 1000
-sentence: 1, 3, 4, 5, 6, 7, 8
-specialisation: 4, 10
+sad: 1, 10, 15, 17, 22, 25, 26, 28
+[T]
+table: 2, 3, 5, 8, 9, 10, 17, 18, 19, 20, 21, 24, 
+    25, 27, 28
+[U]
+ugly: 3, 20
+[V]
+vain: 8
+[W]
+waddling: 17
+[X]
+xv: 3
+[Y]
+year: 1, 5, 10, 27
+[Z]
+zakúska: 18
