@@ -1,0 +1,31 @@
+[1]
+1: 1, 3, 4, 10
+[3]
+3.1.: 4
+[A]
+aasdkfafsfdf: 
+analysis: 1, 3, 6, 13, 14, 1000
+and we they it are you them i never ans youre when
+    : 1
+[C]
+contribution: 3, 14
+[E]
+enigma: 14
+eternally: 5
+[F]
+field: 4, 6, 10, 11, 12, 13
+form: 1, 3, 6, 7, 8, 9, 10, 11, 12, 1000
+full-sentence: 3, 4, 5, 6, 7, 8, 9, 11
+[I]
+intriguing: 8, 14
+[J]
+journal: 6, 11, 1000
+[N]
+noun phrases with or without postmodification. ver
+    y clear-cut differences in noun phrases with: 1
+[O]
+optimism: 5
+[S]
+sentence--: 1000
+sentence: 1, 3, 4, 5, 6, 7, 8
+specialisation: 4, 10

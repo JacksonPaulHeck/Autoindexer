@@ -18,7 +18,7 @@ long toPageNumber(JPString &);                                      //if the inp
 
 bool isPhrase(JPString &);                                          //check if the input from the input file is a word or a phrase
 
-bool printToFile(JPVector<JPString *> &, ofstream &);               //print to the output file
+void printToFile(JPVector<JPString *> &, ofstream &);               //print to the output file
 
 void sort(JPVector<JPString *> &);                                  //use in the print to file to sort alphabetically
 

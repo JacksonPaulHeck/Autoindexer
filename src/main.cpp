@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_RUNNER
 
-#include "catch.hpp"
+#include "../test/catch.hpp"
 #include <iostream>
 #include "JPString.h"
 #include "JPVector.h"

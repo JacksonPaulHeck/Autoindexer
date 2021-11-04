@@ -253,7 +253,7 @@ bool isPhrase(JPString &jpString) { //function to check if the input from the ke
     return false;
 }
 
-bool printToFile(JPVector<JPString *> &inputVector,
+void printToFile(JPVector<JPString *> &inputVector,
                  ofstream &outFile) { //this function prints to the output file using the correct format
     sort(inputVector); //sort the input vector alphabetically
     JPVector<char> letterVector;

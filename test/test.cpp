@@ -1,6 +1,6 @@
 #include "catch.hpp"
-#include "JPVector.h"
-#include "JPString.h"
+#include "../src/JPVector.h"
+#include "../src/JPString.h"
 
 TEST_CASE("JPString Testing") {
     SECTION("JPString can be created from char*, JPString, and empty constructor; Equality operators") {
