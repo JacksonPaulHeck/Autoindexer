@@ -23,6 +23,9 @@ jobs:
       - name: Checkout project repo from GitHub
         uses: actions/checkout@v1
 
+      - name: Install Valgrind
+        run: sudo apt install valgrind
+
       - name: Executable name Environment Variable Check
         run: |
           echo $EXE_NAME
@@ -57,12 +60,12 @@ jobs:
       - name: Run the project
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: ./$EXE_NAME $INPUT_FILES $OUTPUT_FILES
+        run: valgrind --leak-check=yes ./$EXE_NAME $INPUT_FILES $OUTPUT_FILES
 
       - name: Run Catch tests
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: ./$EXE_NAME
+        run: valgrind --leak-check=yes ./$EXE_NAME
 
       - name: Copy output files to artifact directory
         working-directory: ${{runner.workspace}}/build
